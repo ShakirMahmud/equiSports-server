@@ -49,6 +49,21 @@ async function run() {
     //   console.log(result)
     // })
 
+    // products db
+    const productsCollection = client.db('equisports').collection('products');
+
+    // get all products
+    app.get('/products', async (req, res) => {
+      const result = await productsCollection.find().toArray();
+      res.send(result);
+    })  
+
+    // create a product
+    app.post('/products', async (req, res) => {
+      const product = req.body;
+      const result = await productsCollection.insertOne(product);
+      res.send(result);
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
