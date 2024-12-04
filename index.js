@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     // user db
     const userCollection = client.db('equisports').collection('users');
@@ -42,12 +42,12 @@ async function run() {
     })
 
     // when sign in check if user exist
-    // app.path('/users', async (req, res) => {
-    //   const email = req.body.email; 
-    //   const result = await userCollection.findOne({ email: email });
-    //   res.send(result);
-    //   console.log(result)
-    // })
+    app.path('/users', async (req, res) => {
+      const email = req.body.email; 
+      const result = await userCollection.findOne({ email: email });
+      res.send(result);
+      console.log(result)
+    })
 
     // products db
     const productsCollection = client.db('equisports').collection('products');
@@ -69,6 +69,29 @@ async function run() {
     app.post('/products', async (req, res) => {
       const product = req.body;
       const result = await productsCollection.insertOne(product);
+      res.send(result);
+    })
+
+    // update a product
+    app.put('/products/:id', async (req, res) => {
+      const id = req.params.id;
+      const product = req.body;
+      const query = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = { 
+        $set: {
+          image: product.image,
+          itemName: product.itemName,
+          categoryName: product.categoryName,
+          description: product.description,
+          price: product.price,
+          rating: product.rating,
+          customization: product.customization,
+          processingTime: product.processingTime,
+          stockStatus: product.stockStatus
+        } 
+      };
+      const result = await productsCollection.updateOne(query, updateDoc, options);
       res.send(result);
     })
 
