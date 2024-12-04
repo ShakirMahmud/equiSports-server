@@ -9,9 +9,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-
-
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.2cmkq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -28,8 +25,29 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    // user db
     const userCollection = client.db('equisports').collection('users');
 
+    // get all users
+    app.get('/users', async (req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    })
+
+    // create a user
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
+      res.send(result);
+    })
+
+    // when sign in check if user exist
+    // app.path('/users', async (req, res) => {
+    //   const email = req.body.email; 
+    //   const result = await userCollection.findOne({ email: email });
+    //   res.send(result);
+    //   console.log(result)
+    // })
 
 
     // Send a ping to confirm a successful connection
@@ -41,8 +59,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
 
 
 app.get('/', (req, res) => {
