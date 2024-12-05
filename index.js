@@ -1,7 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -17,7 +17,7 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 
 async function run() {
@@ -26,59 +26,51 @@ async function run() {
     // await client.connect();
 
     // user db
-    const userCollection = client.db('equisports').collection('users');
+    const userCollection = client.db("equisports").collection("users");
 
     // get all users
-    app.get('/users', async (req, res) => {
+    app.get("/users", async (req, res) => {
       const result = await userCollection.find().toArray();
       res.send(result);
-    })
+    });
 
     // create a user
-    app.post('/users', async (req, res) => {
+    app.post("/users", async (req, res) => {
       const user = req.body;
       const result = await userCollection.insertOne(user);
       res.send(result);
-    })
-
-    // when sign in check if user exist
-    app.path('/users', async (req, res) => {
-      const email = req.body.email; 
-      const result = await userCollection.findOne({ email: email });
-      res.send(result);
-      console.log(result)
-    })
+    });
 
     // products db
-    const productsCollection = client.db('equisports').collection('products');
+    const productsCollection = client.db("equisports").collection("products");
 
     // get all products
-    app.get('/products', async (req, res) => {
+    app.get("/products", async (req, res) => {
       const result = await productsCollection.find().toArray();
       res.send(result);
-    })  
+    });
     // get a single product
-    app.get('/products/:id', async (req, res) => {
+    app.get("/products/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productsCollection.findOne(query);
       res.send(result);
-    })
+    });
 
     // create a product
-    app.post('/products', async (req, res) => {
+    app.post("/products", async (req, res) => {
       const product = req.body;
       const result = await productsCollection.insertOne(product);
       res.send(result);
-    })
+    });
 
     // update a product
-    app.put('/products/:id', async (req, res) => {
+    app.put("/products/:id", async (req, res) => {
       const id = req.params.id;
       const product = req.body;
       const query = { _id: new ObjectId(id) };
       const options = { upsert: true };
-      const updateDoc = { 
+      const updateDoc = {
         $set: {
           image: product.image,
           itemName: product.itemName,
@@ -88,24 +80,39 @@ async function run() {
           rating: product.rating,
           customization: product.customization,
           processingTime: product.processingTime,
-          stockStatus: product.stockStatus
-        } 
+          stockStatus: product.stockStatus,
+        },
       };
-      const result = await productsCollection.updateOne(query, updateDoc, options);
+      const result = await productsCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
       res.send(result);
-    })
+    });
 
     // delete a product
-    app.delete('/products/:id', async (req, res) => {
+    app.delete("/products/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productsCollection.deleteOne(query);
       res.send(result);
-    })
+    });
+
+    // get products by category
+    app.get("/products/category/:category", async (req, res) => {
+      const category = req.params.category.toLowerCase();
+      const query = { categoryName: { $regex: new RegExp(`^${category}$`, 'i') } }; // Case-insensitive regex
+      const result = await productsCollection.find(query).toArray();
+      res.send(result);
+    });
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
@@ -113,12 +120,10 @@ async function run() {
 }
 run().catch(console.dir);
 
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 app.listen(port, () => {
-  console.log(`The app listening on port ${port}`)
-})
+  console.log(`The app listening on port ${port}`);
+});
