@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
+    await client.connect();
 
     // user db
     const userCollection = client.db("equisports").collection("users");
@@ -99,14 +99,30 @@ async function run() {
       res.send(result);
     });
 
+    // Get all unique categories
+    app.get("/categories", async (req, res) => {
+      try {
+        const categories = await productsCollection.aggregate([
+          { $group: { _id: "$categoryName" } },
+          { $project: { _id: 0, categoryName: "$_id" } },
+        ]).toArray();
+    
+        res.send(categories.map(item => item.categoryName));
+      } catch (error) {
+        res.status(500).send({ message: "Error fetching categories", error });
+      }
+    });
+    
+
     // get products by category
     app.get("/products/category/:category", async (req, res) => {
       const category = req.params.category.toLowerCase();
-      const query = { categoryName: { $regex: new RegExp(`^${category}$`, 'i') } }; // Case-insensitive regex
+      const query = {
+        categoryName: { $regex: new RegExp(`^${category}$`, "i") },
+      }; // Case-insensitive regex
       const result = await productsCollection.find(query).toArray();
       res.send(result);
     });
-    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
