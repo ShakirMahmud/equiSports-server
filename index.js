@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
+    await client.connect();
 
     // user db
     const userCollection = client.db("equisports").collection("users");
@@ -121,6 +121,16 @@ async function run() {
         categoryName: { $regex: new RegExp(`^${category}$`, "i") },
       }; // Case-insensitive regex
       const result = await productsCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // sort products by price
+    app.get("/products/sort/:sort", async (req, res) => {
+      const sort = req.params.sort;
+      const result = await productsCollection
+        .find()
+        .sort({ price: sort === "asc" ? 1 : -1 })
+        .toArray();
       res.send(result);
     });
 
