@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     // user db
     const userCollection = client.db("equisports").collection("users");
@@ -56,6 +56,16 @@ async function run() {
       const result = await productsCollection.findOne(query);
       res.send(result);
     });
+
+    app.get('/limitedProductsData', async (req, res) => {
+      try {
+        const products = await productsCollection.find().limit(6).toArray();
+        res.send(products);
+      } catch (error) {
+        res.status(500).send({ message: 'Failed to fetch limited products', error });
+      }
+    });
+    
 
     // create a product
     app.post("/products", async (req, res) => {
