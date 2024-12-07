@@ -49,6 +49,7 @@ async function run() {
       const result = await productsCollection.find().toArray();
       res.send(result);
     });
+
     // get a single product
     app.get("/products/:id", async (req, res) => {
       const id = req.params.id;
@@ -129,7 +130,7 @@ async function run() {
       const category = req.params.category.toLowerCase();
       const query = {
         categoryName: { $regex: new RegExp(`^${category}$`, "i") },
-      }; // Case-insensitive regex
+      };
       const result = await productsCollection.find(query).toArray();
       res.send(result);
     });
