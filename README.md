@@ -7,7 +7,7 @@ EquiSports API is a backend service for an online sports equipment store that of
 ## **Live Site**
 
 - **Frontend**: [EquiSports Frontend](https://equi-sports-shakir.vercel.app/)
-- **Backend**: [EquiSports Frontend](https://equi-sports-server-shakir.vercel.app)
+- **Backend**: [EquiSports Server](https://equi-sports-server-shakir.vercel.app)
 
 ---
 
