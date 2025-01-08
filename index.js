@@ -60,7 +60,7 @@ async function run() {
 
     app.get('/limitedProductsData', async (req, res) => {
       try {
-        const products = await productsCollection.find().limit(6).toArray();
+        const products = await productsCollection.find().limit(8).toArray();
         res.send(products);
       } catch (error) {
         res.status(500).send({ message: 'Failed to fetch limited products', error });

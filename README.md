@@ -1,53 +1,97 @@
-# EquiSports
+# **EquiSports API**
 
-EquiSports is an online sports equipment store offering a wide range of sports accessories, including gear and apparel, for various sports disciplines. The website allows customers to browse, purchase, and review products. It supports user authentication and product management, with a responsive design suitable for mobile, tablet, and desktop devices.
+EquiSports API is a backend service for an online sports equipment store that offers a variety of sports accessories, including gear and apparel. The API allows users to register, view products, and manage inventory through MongoDB. Admins can add, update, delete products, and fetch product details by categories or price.
 
-### Live Site:
-[EquiSports](https://equi-sports-shakir.vercel.app/)
+---
 
-### Features:
-- **User Authentication**: Users can log in and register with email/password or Google authentication. After logging in, users can view and manage their equipment.
-- **Product Management**: Admin users can add, view, update, and delete products. All product details, including name, category, price, and description, are stored in MongoDB.
-- **Private Routes**: Several pages such as Add Equipment, View Details, and My Equipment List are private routes accessible only to logged-in users.
-- **Responsive Design**: The site is fully responsive across devices, providing a smooth experience on mobile, tablet, and desktop.
-- **Product Sorting**: Products can be sorted by price (ascending or descending).
-- **Dark/Light Theme Toggle**: Users can toggle between dark and light themes.
-- **Toast Notifications**: Custom error and success messages are displayed using SweetAlert2.
-- **Loading Spinner**: A loading spinner is shown while data is being fetched from the server.
-- **Lottie Animations**: Lottie animations are used to enhance user experience.
-- **React Tooltip**: Tooltips are used to display additional information on hover.
-- **Categories**: Users can filter products by category.
+## **Live Site**
 
-### Technologies Used:
-- **Frontend**: 
-  - React
-  - React Router DOM
-  - Tailwind CSS
-  - Lottie React
-  - SweetAlert2
-  - React Tooltip
-  - React Awesome Reveal
-  - Swiper
-  - Firebase Authentication
-  - React Icons
-- **Backend**:
-  - Node.js
-  - Express.js
-  - MongoDB
-  - CORS middleware
-  - dotenv for environment variable management
-  - MongoDB Atlas for database hosting
-- **Dev Tools**:
-  - Vite (for bundling and development)
-  - ESLint (for code linting)
-  - DaisyUI (for UI components)
+- **Frontend**: [EquiSports Frontend](https://equi-sports-shakir.vercel.app/)
+- **Backend**: [EquiSports Frontend](https://equi-sports-server-shakir.vercel.app)
 
-### Server-Side Code:
-The server is built using Express.js, which connects to a MongoDB database via MongoDB Atlas. The database stores user data and product information, while the server provides APIs for CRUD operations on products and user data.
+---
 
-- **MongoDB**: Stores products, user details, and categories.
-- **APIs**: 
-  - `https://equi-sports-server-shakir.vercel.app/products`: Manage product data (GET, POST, PUT, DELETE).
-  - `https://equi-sports-server-shakir.vercel.app/categories`: Fetch unique product categories.
-  - `https://equi-sports-server-shakir.vercel.app/products/category/:category`: Fetch products filtered by category.
-  - `https://equi-sports-server-shakir.vercel.app/users`: Manage user data (GET, POST).
+## **API Endpoints**
+
+### **User Endpoints**
+
+- **GET /users**: Fetch all users.
+- **POST /users**: Create a new user.
+
+### **Product Endpoints**
+
+- **GET /products**: Fetch all products.
+- **GET /products/:id**: Fetch a single product by ID.
+- **GET /limitedProductsData**: Fetch the first 8 products.
+- **POST /products**: Add a new product.
+- **PUT /products/:id**: Update a product by ID.
+- **DELETE /products/:id**: Delete a product by ID.
+- **GET /categories**: Get a list of unique categories.
+- **GET /products/category/:category**: Fetch products by category.
+- **GET /products/sort/:sort**: Sort products by price (`asc` or `desc`).
+
+---
+
+## **Technologies Used**
+
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB, MongoDB Atlas
+- **Authentication**: None (Basic API)
+- **Middleware**: CORS
+- **Environment Variables**: dotenv
+
+---
+
+## **How to Run the API Locally**
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/ShakirMahmud/equiSports-server.git
+cd equisports-server
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Set Up Environment Variables
+
+Create a `.env` file in the root of your project and add your MongoDB credentials:
+
+```env
+DB_USER=your-mongodb-username
+DB_PASS=your-mongodb-password
+```
+
+### 4. Run the Server
+
+```bash
+npm start
+```
+
+The server will start on port `5000` (or the port defined in your `.env` file).
+
+---
+
+## **Contributing**
+
+If you'd like to contribute to the project, feel free to fork the repository, create a new branch, and submit a pull request. Please ensure that all code is properly tested before submitting a pull request.
+
+---
+
+## **License**
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## **Credits**
+
+- **Backend Framework**: Express.js
+- **Database**: MongoDB
+- **Hosting**: MongoDB Atlas
+
+
